@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"log/slog"
 	"net/http"
@@ -55,6 +57,9 @@ func requestIDMiddleware(next http.Handler) http.Handler {
 }
 
 func newRequestID() string {
-	// Foundation placeholder. Replace with a UUID generator when dependencies are introduced.
-	return "req-local"
+	var b [16]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return "req-unknown"
+	}
+	return "req-" + hex.EncodeToString(b[:])
 }
