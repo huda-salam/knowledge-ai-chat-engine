@@ -4,6 +4,18 @@
 
 Build the Knowledge AI Chat Engine as a production-capable Go modular monolith centered on grounded knowledge retrieval, evidence handling, conversational generation, and traceable citations.
 
+## KISS and SOLID rules
+
+- Prefer the standard library and PostgreSQL before adding infrastructure or framework dependencies.
+- One responsibility per package/component; avoid god services and god repositories.
+- Keep interfaces small and owned by the consumer. Introduce an interface only where it creates a meaningful substitution or test boundary.
+- Depend on domain/application contracts, not concrete infrastructure.
+- Prefer composition over inheritance-style abstractions.
+- Keep data models simple; do not build a generic metadata framework until a real requirement appears.
+- Do not create abstractions for hypothetical providers or databases beyond the contracts already required by the PRD.
+- Favor readable SQL and explicit application flow over clever ORM behavior.
+- One complete vertical slice is more valuable than many incomplete abstractions.
+
 ## Architecture invariants
 
 - Domain code must not depend on HTTP, PostgreSQL, OpenRouter, or embedding vendors.
@@ -18,7 +30,7 @@ Build the Knowledge AI Chat Engine as a production-capable Go modular monolith c
 ## Delivery sequence
 
 1. Project/bootstrap: Go module, HTTP server, configuration, structured logging, request IDs, health/readiness.
-2. Persistence: PostgreSQL migrations and repositories for knowledge, versions, sections, chunks, conversations, messages, citations, and evaluation data.
+2. Persistence: PostgreSQL migrations and repositories for knowledge, versions, sections, chunks, conversations, messages, and citations.
 3. Knowledge ingestion: Markdown parser, structural section extraction, deterministic chunking, metadata, content hashing, validation, and publication workflow.
 4. Retrieval: PostgreSQL full-text search, metadata filters, ranking, top-K, provenance-rich retrieval results, and `/search`.
 5. Evidence/context: evidence set construction, deduplication, diversity controls, token budgeting, and prompt context assembly.
